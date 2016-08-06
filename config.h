@@ -109,6 +109,9 @@
 #define TINYTERM_KEY_COPY       GDK_C
 #define TINYTERM_KEY_PASTE      GDK_V
 #define TINYTERM_KEY_OPEN       GDK_O   // pass selected text to xdg-open
+#define TINYTERM_FONT_ENLARGE   GDK_Up
+#define TINYTERM_FONT_SHRINK    GDK_Down
+#define TINYTERM_FONT_RESET     GDK_equal
 
 /* Regular expression matching urls */
 #define SPECIAL_CHARS   "[[:alnum:]\\Q+-_,?;.:/!%$^*&~#=()\\E]"

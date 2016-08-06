@@ -33,6 +33,7 @@
 #include "config.h"
 
 static int child_pid = 0;   // needs to be global for signal_handler to work
+static gint initial_font_size;
 
 /* spawn xdg-open and pass text as argument */
 static void
@@ -87,6 +88,18 @@ window_title_cb(VteTerminal* vte)
     gtk_window_set_title(GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET (vte))), vte_terminal_get_window_title(vte));
 }
 
+/* enlarge/shrink the font */
+static void
+resize_font(VteTerminal* vte, gint size, gboolean is_absolute)
+{
+    PangoFontDescription *desc = pango_font_description_copy(vte_terminal_get_font(vte));
+    if (!is_absolute)
+        size = pango_font_description_get_size(desc) + size * PANGO_SCALE;
+    pango_font_description_set_size(desc, size);
+    vte_terminal_set_font(vte, desc);
+    pango_font_description_free(desc);
+}
+
 /* callback to react to key press events */
 static gboolean
 key_press_cb(VteTerminal* vte, GdkEventKey* event)
@@ -102,6 +115,15 @@ key_press_cb(VteTerminal* vte, GdkEventKey* event)
             case TINYTERM_KEY_OPEN:
                 xdg_open_selection(vte);
                 return TRUE;
+            case TINYTERM_FONT_ENLARGE:
+                resize_font(vte, +1, FALSE);
+                return TRUE;
+            case TINYTERM_FONT_SHRINK:
+                resize_font(vte, -1, FALSE);
+                return TRUE;
+            case TINYTERM_FONT_RESET:
+                resize_font(vte, initial_font_size, TRUE);
+                return TRUE;
         }
     }
     return FALSE;
@@ -113,6 +135,7 @@ vte_config(VteTerminal* vte)
     GdkColor color_fg, color_bg;
     GdkColor color_palette[16];
     GRegex* regex = g_regex_new(url_regex, G_REGEX_CASELESS, G_REGEX_MATCH_NOTEMPTY, NULL);
+    const PangoFontDescription* desc;
 
     vte_terminal_search_set_gregex(vte, regex);
     vte_terminal_search_set_wrap_around     (vte, TINYTERM_SEARCH_WRAP_AROUND);
@@ -123,6 +146,9 @@ vte_config(VteTerminal* vte)
     vte_terminal_set_word_chars             (vte, TINYTERM_WORD_CHARS);
     vte_terminal_set_scrollback_lines       (vte, TINYTERM_SCROLLBACK_LINES);
     vte_terminal_set_font_from_string_full  (vte, TINYTERM_FONT, TINYTERM_ANTIALIAS);
+
+    desc = vte_terminal_get_font(vte);
+    initial_font_size = pango_font_description_get_size(desc);
 
     /* init colors */
     gdk_color_parse(TINYTERM_COLOR_FOREGROUND, &color_fg);
