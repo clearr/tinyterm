@@ -50,7 +50,7 @@
 
 /* Custom color scheme */
 #define TINYTERM_COLOR_BACKGROUND   "#1f1f1f"
-#define TINYTERM_COLOR_FOREGROUND   "#c5c5c5"
+#define TINYTERM_COLOR_FOREGROUND   "#cdcdcd"
 /* black */
 #define TINYTERM_COLOR0     "#000000"
 #define TINYTERM_COLOR8     "#7f7f7f"
