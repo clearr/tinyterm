@@ -7,7 +7,7 @@ endif
 
 CC := $(CC) -std=c99
 
-base_CFLAGS = -Wall -Wextra -pedantic -O2 -g
+base_CFLAGS = -Wall -Wextra -pedantic -O2
 base_LIBS = -lm
 
 pkgs = vte
