@@ -112,6 +112,7 @@
 #define TINYTERM_KEY_FONT_ENLARGE GDK_Up
 #define TINYTERM_KEY_FONT_SHRINK  GDK_Down
 #define TINYTERM_KEY_FONT_RESET   GDK_plus
+#define TINYTERM_KEY_FULLSCREEN   GDK_F11
 
 /* Regular expression matching urls */
 #define SPECIAL_CHARS   "[[:alnum:]\\Q+-_,?;.:/!%$^*&~#=()\\E]"

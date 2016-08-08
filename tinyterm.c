@@ -34,6 +34,7 @@
 
 static int child_pid = 0;   // needs to be global for signal_handler to work
 static gint initial_font_size;
+static gboolean is_fullscreen = FALSE;
 
 /* spawn xdg-open and pass text as argument */
 static void
@@ -100,6 +101,19 @@ resize_font(VteTerminal* vte, gint size, gboolean is_absolute)
     pango_font_description_free(desc);
 }
 
+/* toggle fullscreen state */
+static void
+toggle_fullscreen(VteTerminal* vte)
+{
+    if (is_fullscreen) {
+        is_fullscreen = FALSE;
+        gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(vte))));
+    } else {
+        is_fullscreen = TRUE;
+        gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(vte))));
+    }
+}
+
 /* callback to react to key press events */
 static gboolean
 key_press_cb(VteTerminal* vte, GdkEventKey* event)
@@ -125,6 +139,9 @@ key_press_cb(VteTerminal* vte, GdkEventKey* event)
                 resize_font(vte, initial_font_size, TRUE);
                 return TRUE;
         }
+    } else if (event->keyval == TINYTERM_KEY_FULLSCREEN) {
+        toggle_fullscreen(vte);
+        return TRUE;
     }
     return FALSE;
 }
