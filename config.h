@@ -105,13 +105,13 @@
 //#define TINYTERM_COLOR15     "#ffffff"
 
 /* Keyboard shortcuts */
-#define TINYTERM_MODIFIER         GDK_CONTROL_MASK | GDK_SHIFT_MASK
+#define TINYTERM_MODIFIER         GDK_CONTROL_MASK | GDK_MOD1_MASK
 #define TINYTERM_KEY_COPY         GDK_C
 #define TINYTERM_KEY_PASTE        GDK_V
 #define TINYTERM_KEY_OPEN         GDK_O   // pass selected text to xdg-open
 #define TINYTERM_KEY_FONT_ENLARGE GDK_Up
 #define TINYTERM_KEY_FONT_SHRINK  GDK_Down
-#define TINYTERM_KEY_FONT_RESET   GDK_plus
+#define TINYTERM_KEY_FONT_RESET   GDK_equal
 #define TINYTERM_KEY_FULLSCREEN   GDK_F11
 
 /* Regular expression matching urls */
