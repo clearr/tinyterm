@@ -89,6 +89,26 @@ window_title_cb(VteTerminal* vte)
     gtk_window_set_title(GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET (vte))), vte_terminal_get_window_title(vte));
 }
 
+/* apply geometry hints to handle terminal resizing */
+static void
+set_geometry_hints(VteTerminal* vte)
+{
+    GtkWidget* vte_widget = GTK_WIDGET(vte);
+    GdkGeometry geo_hints;
+    glong char_width, char_height;
+
+    char_width = vte_terminal_get_char_width(vte);
+    char_height = vte_terminal_get_char_height(vte);
+    geo_hints.base_width  = char_width;
+    geo_hints.base_height = char_height;
+    geo_hints.min_width   = char_width;
+    geo_hints.min_height  = char_height;
+    geo_hints.width_inc   = char_width;
+    geo_hints.height_inc  = char_height;
+    gtk_window_set_geometry_hints(GTK_WINDOW(gtk_widget_get_toplevel(vte_widget)), vte_widget, &geo_hints,
+                                  GDK_HINT_RESIZE_INC | GDK_HINT_MIN_SIZE | GDK_HINT_BASE_SIZE);
+}
+
 /* enlarge/shrink the font */
 static void
 resize_font(VteTerminal* vte, gint size, gboolean is_absolute)
@@ -98,6 +118,7 @@ resize_font(VteTerminal* vte, gint size, gboolean is_absolute)
         size = pango_font_description_get_size(desc) + size * PANGO_SCALE;
     pango_font_description_set_size(desc, size);
     vte_terminal_set_font(vte, desc);
+    set_geometry_hints(vte);
     pango_font_description_free(desc);
 }
 
@@ -289,7 +310,6 @@ main (int argc, char* argv[])
     GtkWidget* window;
     GtkWidget* box;
     GdkPixbuf* icon;
-    GdkGeometry geo_hints;
     GtkIconTheme* icon_theme;
     GError* error = NULL;
 
@@ -338,15 +358,8 @@ main (int argc, char* argv[])
         g_signal_connect(vte, "window-title-changed", G_CALLBACK (window_title_cb), NULL);
     #endif // TINYTERM_DYNAMIC_WINDOW_TITLE
 
-    /* Apply geometry hints to handle terminal resizing */
-    geo_hints.base_width  = vte->char_width;
-    geo_hints.base_height = vte->char_height;
-    geo_hints.min_width   = vte->char_width;
-    geo_hints.min_height  = vte->char_height;
-    geo_hints.width_inc   = vte->char_width;
-    geo_hints.height_inc  = vte->char_height;
-    gtk_window_set_geometry_hints(GTK_WINDOW (window), vte_widget, &geo_hints,
-                                  GDK_HINT_RESIZE_INC | GDK_HINT_MIN_SIZE | GDK_HINT_BASE_SIZE);
+    vte_config(vte);
+    set_geometry_hints(vte);
 
     /* Create scrollbar */
     #ifdef TINYTERM_SCROLLBAR_VISIBLE
@@ -355,7 +368,6 @@ main (int argc, char* argv[])
     gtk_box_pack_start(GTK_BOX (box), scrollbar, FALSE, FALSE, 0);
     #endif // TINYTERM_SCROLLBAR_VISIBLE
 
-    vte_config(vte);
     vte_spawn(vte, directory, command, NULL);
 
     /* register signal handler */
