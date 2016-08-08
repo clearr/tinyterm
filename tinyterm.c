@@ -115,13 +115,13 @@ key_press_cb(VteTerminal* vte, GdkEventKey* event)
             case TINYTERM_KEY_OPEN:
                 xdg_open_selection(vte);
                 return TRUE;
-            case TINYTERM_FONT_ENLARGE:
+            case TINYTERM_KEY_FONT_ENLARGE:
                 resize_font(vte, +1, FALSE);
                 return TRUE;
-            case TINYTERM_FONT_SHRINK:
+            case TINYTERM_KEY_FONT_SHRINK:
                 resize_font(vte, -1, FALSE);
                 return TRUE;
-            case TINYTERM_FONT_RESET:
+            case TINYTERM_KEY_FONT_RESET:
                 resize_font(vte, initial_font_size, TRUE);
                 return TRUE;
         }
