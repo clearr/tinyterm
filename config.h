@@ -61,7 +61,7 @@
 #define TINYTERM_COLOR2     "#00cd00"
 #define TINYTERM_COLOR10    "#00ff00"
 /* yellow */
-#define TINYTERM_COLOR3     "#cdcd00"
+#define TINYTERM_COLOR3     "#cd9000"
 #define TINYTERM_COLOR11    "#ffff00"
 /* blue */
 #define TINYTERM_COLOR4     "#2b65ff"
