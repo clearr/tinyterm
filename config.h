@@ -53,7 +53,7 @@
 #define TINYTERM_COLOR_FOREGROUND   "#cdcdcd"
 /* black */
 #define TINYTERM_COLOR0     "#000000"
-#define TINYTERM_COLOR8     "#7f7f7f"
+#define TINYTERM_COLOR8     "#5f5f5f"
 /* red */
 #define TINYTERM_COLOR1     "#cd0000"
 #define TINYTERM_COLOR9     "#ff0000"
